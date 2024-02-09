@@ -26,6 +26,33 @@ data.Password=hashedPassword
 
 
 
+router.post("/signin",async(req,res)=>{
+    let input=req.body
+    let Email=req.body.Email
+    let data=await userModel.findOne({"Email":Email})
+    if (!data) {
+        return  res.json({
+            status:"Invalid User"
+              })
+    }
+    console.log(data)
+    let dbPassword=data.Password
+    let inputPassword=req.body.Password
+    console.log(dbPassword)
+    console.log(inputPassword)
+    const match=await bcrypt.compare(inputPassword,dbPassword)
+    if (!match) {
+        return  res.json({
+            status:"Incorrect Password"
+              })
+    }
+
+    res.json({
+        status:"success"
+          })
+
+})
+
 
 
 
